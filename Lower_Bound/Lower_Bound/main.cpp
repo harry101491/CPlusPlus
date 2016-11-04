@@ -33,7 +33,7 @@ int sumOfBitDifference(int* arr, int n)
 
 int main()
 {
-    int arr[] = {1, 3, 5};
+    int arr[] = {1, 2};
     int n = sizeof(arr)/sizeof(arr[0]);
     cout << sumOfBitDifference(arr,n) << endl;
     return 0;
