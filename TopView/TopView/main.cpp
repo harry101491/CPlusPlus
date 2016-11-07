@@ -90,7 +90,7 @@ public:
 };
 int main() {
     Solution myTree;
-    Node* root = NULL;
+    Node* root = nullptr;
     int t;
     int data;
     
