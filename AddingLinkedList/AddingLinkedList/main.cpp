@@ -20,9 +20,8 @@ struct Node
 
 Node* createNewNode(int);
 void printList(Node*);
-Node* findPosition(Node*);
 Node* makeNumber();
-Node* sumList(Node*, Node*, Node*, Node*, Node*);
+Node* sumList(Node*, Node*);
 
 int main()
 {
@@ -34,70 +33,49 @@ int main()
     printList(head1);
     cout<<"the second number is: "<<endl;
     printList(head2);
-    // make fast and slow pointers for the list1 and list2
-    Node* fast1 = head1->next;
-    Node* slow1 = head1;
-    Node* fast2 = head2->next;
-    Node* slow2 = head2;
-    Node* sumHead = nullptr;
-    sumHead = sumList(fast1, slow1, fast2, slow2, sumHead);
+    Node* sumHead = sumList(head1, head2);
     printList(sumHead);
     return 0;
 }
-Node* sumList(Node* fast1, Node* slow1, Node* fast2, Node* slow2, Node* sumHead)
+Node* sumList(Node* firstHead, Node* secondHead)
 {
-    if(fast1 == nullptr && fast2 == nullptr)
+    int carry = 0;
+    Node* prev = nullptr;
+    Node* temp;
+    Node* sumHead = nullptr;
+    while(firstHead != nullptr || secondHead != nullptr)
     {
-        sumHead = new Node();
-        sumHead->data = 0;
-        sumHead->next = nullptr;
-        Node* newNode = new Node();
-        int val = slow1->data + slow2->data + sumHead->data;
-        if(val >= 10)
+        int sum = carry + ((firstHead) ? firstHead->data : 0) + ((secondHead) ? secondHead->data : 0);
+        if(sum >= 10)
         {
-            sumHead->data = val-10;
-            newNode->data = 1;
-            newNode->next = sumHead;
-            sumHead = newNode;
+            carry = 1;
+            sum = sum % 10;
         }
         else
         {
-            sumHead->data = val;
-            newNode->data = 0;
-            newNode->next = sumHead;
-            sumHead = newNode;
+            carry = 0;
         }
-        return sumHead;
-    }
-    else if(fast1 == nullptr && fast2 != nullptr)
-    {
-        return sumList(fast1, slow1, fast2->next, fast2, sumHead);
-    }
-    else if(fast1 != nullptr && fast2 == nullptr)
-    {
-        return sumList(fast1->next, fast1, fast2, slow2, sumHead);
-    }
-    else
-    {
-        sumHead = sumList(fast1->next, fast1, fast2->next, fast2, sumHead);
-        int val1 = slow1->data + slow2->data + sumHead->data;
-        Node* newNode = new Node();
-        if(val1 >= 10)
+        temp = new Node();
+        temp->data = sum;
+        if(sumHead != nullptr)
         {
-            sumHead->data = val1-10;
-            newNode->data = 1;
-            newNode->next = sumHead;
-            sumHead = newNode;
+            prev->next = temp;
         }
         else
         {
-            sumHead->data = val1;
-            newNode->data = 0;
-            newNode->next = sumHead;
-            sumHead = newNode;
+            sumHead = temp;
         }
-        return sumHead;
+        prev = temp;
+        if(firstHead)
+        {
+            firstHead = firstHead->next;
+        }
+        if(secondHead)
+        {
+            secondHead = secondHead->next;
+        }
     }
+    return sumHead;
 }
 Node* createNewNode(int data)
 {
