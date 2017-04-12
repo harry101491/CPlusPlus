@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -26,25 +27,31 @@ struct Node
 Node* insertNode(int);
 void printInorder(Node*);
 bool isBST(Node*);
+Node* deepestNode(Node*);
+int height(Node*);
 
 int main()
 {
     Node* root = nullptr;
-    root = insertNode(4);
+    root = insertNode(1);
     root->left = insertNode(2);
-    root->right = insertNode(5);
-    root->left->left = insertNode(1);
-    root->left->right = insertNode(3);
-//    printInorder(root);
-    if(isBST(root))
-    {
-        cout<<"the given tree is BST"<<endl;
-    }
-    else
-    {
-        cout<<"the given tree is not a BST"<<endl;
-    }
-    cout<<endl;
+    root->right = insertNode(3);
+    root->left->left = insertNode(4);
+    root->left->right = insertNode(5);
+    root->right->left = insertNode(6);
+    root->right->right = insertNode(7);
+    root->right->right->right = insertNode(8);
+    //printInorder(root);
+    cout<<"the deepest node of the tree is: "<<deepestNode(root)->data<<endl;
+//    if(isBST(root))
+//    {
+//        cout<<"the given tree is BST"<<endl;
+//    }
+//    else
+//    {
+//        cout<<"the given tree is not a BST"<<endl;
+//    }
+//    cout<<endl;
     return 0;
 }
 // the function to prove that the given binary tree is BST or not.
@@ -107,5 +114,38 @@ void printInorder(Node* p)
         printInorder(p->left);
         cout<<p->data;
         printInorder(p->right);
+    }
+}
+Node* deepestNode(Node* root)
+{
+    if(root->left == nullptr && root->right == nullptr)
+    {
+        return root;
+    }
+    else
+    {
+        int leftHeight = height(root->left);
+        int rightHeight = height(root->right);
+        if(leftHeight >= rightHeight)
+        {
+            return deepestNode(root->left);
+        }
+        else
+        {
+            return deepestNode(root->right);
+        }
+    }
+}
+
+int height(Node* root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+    else
+    {
+        int childHeight = max(height(root->left), height(root->right));
+        return 1+childHeight;
     }
 }
